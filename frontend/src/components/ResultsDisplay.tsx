@@ -23,6 +23,8 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
     competitive: false,
   });
 
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   const toggleSection = (section: string) => {
     setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
@@ -177,9 +179,13 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
                     <Users size={16} style={{ display: 'inline', marginRight: '0.25rem' }} />
                     People
                   </h4>
-                  <div className="flex gap-xs" style={{ flexWrap: 'wrap' }}>
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: 'var(--spacing-xs)'
+                  }}>
                     {aiAnalysis.entities.people.map((person, i) => (
-                      <span key={i} className="badge">{person}</span>
+                      <span key={i} className="badge badge-primary" style={{ wordBreak: 'break-word' }}>{person}</span>
                     ))}
                   </div>
                 </div>
@@ -190,9 +196,13 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
                     <Tag size={16} style={{ display: 'inline', marginRight: '0.25rem' }} />
                     Organizations
                   </h4>
-                  <div className="flex gap-xs" style={{ flexWrap: 'wrap' }}>
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: 'var(--spacing-xs)'
+                  }}>
                     {aiAnalysis.entities.organizations.map((org, i) => (
-                      <span key={i} className="badge">{org}</span>
+                      <span key={i} className="badge badge-primary" style={{ wordBreak: 'break-word' }}>{org}</span>
                     ))}
                   </div>
                 </div>
@@ -203,9 +213,13 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
                     <MapPin size={16} style={{ display: 'inline', marginRight: '0.25rem' }} />
                     Locations
                   </h4>
-                  <div className="flex gap-xs" style={{ flexWrap: 'wrap' }}>
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: 'var(--spacing-xs)'
+                  }}>
                     {aiAnalysis.entities.locations.map((loc, i) => (
-                      <span key={i} className="badge">{loc}</span>
+                      <span key={i} className="badge badge-primary" style={{ wordBreak: 'break-word' }}>{loc}</span>
                     ))}
                   </div>
                 </div>
@@ -216,9 +230,13 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
                     <Cpu size={16} style={{ display: 'inline', marginRight: '0.25rem' }} />
                     Technologies
                   </h4>
-                  <div className="flex gap-xs" style={{ flexWrap: 'wrap' }}>
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: 'var(--spacing-xs)'
+                  }}>
                     {aiAnalysis.entities.technologies.map((tech, i) => (
-                      <span key={i} className="badge">{tech}</span>
+                      <span key={i} className="badge badge-primary" style={{ wordBreak: 'break-word' }}>{tech}</span>
                     ))}
                   </div>
                 </div>
@@ -509,27 +527,21 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
                 background: 'var(--bg-elevated)',
                 borderRadius: 'var(--radius-md)',
                 display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                gap: 'var(--spacing-sm)'
+                flexDirection: 'column',
+                gap: 'var(--spacing-xs)'
               }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: '0.875rem', marginBottom: '0.25rem' }}>
-                    {link.text || '(no text)'}
-                  </div>
-                  <a href={link.href} target="_blank" rel="noopener noreferrer" style={{
-                    fontSize: '0.75rem',
-                    color: 'var(--text-tertiary)',
-                    textDecoration: 'none',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    display: 'block'
-                  }}>
-                    {link.href}
-                  </a>
+                <div style={{ fontSize: '0.875rem', wordBreak: 'break-word' }}>
+                  {link.text || '(no text)'}
                 </div>
-                <span className={`badge ${link.isInternal ? 'badge-success' : ''}`} style={{ flexShrink: 0 }}>
+                <a href={link.href} target="_blank" rel="noopener noreferrer" style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--text-tertiary)',
+                  textDecoration: 'none',
+                  wordBreak: 'break-all'
+                }}>
+                  {link.href}
+                </a>
+                <span className={`badge ${link.isInternal ? 'badge-success' : ''}`} style={{ alignSelf: 'flex-start' }}>
                   {link.isInternal ? 'Internal' : 'External'}
                 </span>
               </div>
@@ -566,7 +578,12 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
                   borderRadius: 'var(--radius-md)',
                   overflow: 'hidden',
                   border: '1px solid var(--border)',
+                  cursor: 'pointer',
+                  transition: 'transform var(--transition-fast)'
                 }}
+                onClick={() => setSelectedImage(img.src)}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
               >
                 <img
                   src={img.src}
@@ -589,6 +606,38 @@ export default function ResultsDisplay({ result, onReset }: ResultsDisplayProps)
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Image Preview Modal */}
+      {selectedImage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.9)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: 'var(--spacing-lg)',
+            cursor: 'pointer'
+          }}
+          onClick={() => setSelectedImage(null)}
+        >
+          <img
+            src={selectedImage}
+            alt="Preview"
+            style={{
+              maxWidth: '90%',
+              maxHeight: '90%',
+              objectFit: 'contain',
+              borderRadius: 'var(--radius-md)'
+            }}
+          />
         </div>
       )}
     </div>

@@ -1,12 +1,27 @@
 import type { ScrapedData, AnalyticsData } from '../types/index.js';
 
 class AnalyticsService {
-  generateAnalytics(scrapedData: ScrapedData): AnalyticsData {
-    const linkAnalysis = this.analyzeLinkData(scrapedData.links);
-    const imageAnalysis = this.analyzeImages(scrapedData.images);
-    const headingAnalysis = this.analyzeHeadings(scrapedData.headings);
-    const { totalWords, readingTime } = this.analyzeContent(scrapedData.paragraphs);
-    const seoScore = this.calculateSEOScore(scrapedData, headingAnalysis, imageAnalysis);
+  generateAnalytics(data: ScrapedData): AnalyticsData {
+    // Calculate total words from paragraphs
+    const totalWords = data.paragraphs.reduce((sum, p) => {
+      const words = p.text.trim().split(/\s+/).filter(word => word.length > 0);
+      return sum + words.length;
+    }, 0);
+
+    // Calculate reading time (average 200 words per minute)
+    const readingTime = Math.ceil(totalWords / 200);
+
+    // Analyze links
+    const linkAnalysis = this.analyzeLinkStructure(data.links);
+
+    // Analyze images
+    const imageAnalysis = this.analyzeImages(data.images);
+
+    // Analyze headings
+    const headingAnalysis = this.analyzeHeadings(data.headings);
+
+    // Calculate SEO score
+    const seoScore = this.calculateSEOScore(data, imageAnalysis, headingAnalysis);
 
     return {
       totalWords,
@@ -18,7 +33,7 @@ class AnalyticsService {
     };
   }
 
-  private analyzeLinkData(links: ScrapedData['links']): AnalyticsData['linkAnalysis'] {
+  private analyzeLinkStructure(links: ScrapedData['links']): AnalyticsData['linkAnalysis'] {
     const totalLinks = links.length;
     const internalLinks = links.filter(link => link.isInternal).length;
     const externalLinks = links.filter(link => link.isExternal).length;
@@ -80,38 +95,29 @@ class AnalyticsService {
     };
   }
 
-  private analyzeContent(paragraphs: ScrapedData['paragraphs']): { totalWords: number; readingTime: number } {
-    const allText = paragraphs.map(p => p.text).join(' ');
-    const words = allText.split(/\s+/).filter(word => word.length > 0);
-    const totalWords = words.length;
 
-    // Average reading speed: 200-250 words per minute
-    const readingTime = Math.ceil(totalWords / 225);
-
-    return { totalWords, readingTime };
-  }
 
   private calculateSEOScore(
-    scrapedData: ScrapedData,
-    headingAnalysis: AnalyticsData['headingAnalysis'],
-    imageAnalysis: AnalyticsData['imageAnalysis']
+    data: ScrapedData,
+    imageAnalysis: AnalyticsData['imageAnalysis'],
+    headingAnalysis: AnalyticsData['headingAnalysis']
   ): number {
     let score = 0;
 
     // Title (20 points)
-    if (scrapedData.title) {
+    if (data.title) {
       score += 10;
-      if (scrapedData.title.length >= 30 && scrapedData.title.length <= 60) {
+      if (data.title.length >= 30 && data.title.length <= 60) {
         score += 10;
-      } else if (scrapedData.title.length > 0) {
+      } else if (data.title.length > 0) {
         score += 5;
       }
     }
 
     // Meta description (20 points)
-    if (scrapedData.metadata.description) {
+    if (data.metadata.description) {
       score += 10;
-      if (scrapedData.metadata.description.length >= 120 && scrapedData.metadata.description.length <= 160) {
+      if (data.metadata.description.length >= 120 && data.metadata.description.length <= 160) {
         score += 10;
       } else {
         score += 5;
@@ -144,7 +150,7 @@ class AnalyticsService {
     }
 
     // Content length (15 points)
-    const totalWords = scrapedData.paragraphs.reduce((sum, p) => {
+    const totalWords = data.paragraphs.reduce((sum, p) => {
       return sum + p.text.split(/\s+/).length;
     }, 0);
 
@@ -157,9 +163,9 @@ class AnalyticsService {
     }
 
     // Open Graph tags (10 points)
-    if (scrapedData.metadata.ogTitle && scrapedData.metadata.ogDescription) {
+    if (data.metadata.ogTitle && data.metadata.ogDescription) {
       score += 10;
-    } else if (scrapedData.metadata.ogTitle || scrapedData.metadata.ogDescription) {
+    } else if (data.metadata.ogTitle || data.metadata.ogDescription) {
       score += 5;
     }
 

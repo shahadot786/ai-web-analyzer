@@ -60,7 +60,12 @@ export function useHistory() {
   };
 
   const removeFromHistory = (id: string) => {
-    setHistory(prev => prev.filter(item => item.id !== id));
+    setHistory(prev => {
+      const updated = prev.filter(item => item.id !== id);
+      // Update localStorage immediately
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const clearHistory = () => {
@@ -80,11 +85,16 @@ export function useHistory() {
     );
   };
 
+  const getHistoryItem = (id: string): HistoryItem | undefined => {
+    return history.find(item => item.id === id);
+  };
+
   return {
     history,
     addToHistory,
     removeFromHistory,
     clearHistory,
-    searchHistory
+    searchHistory,
+    getHistoryItem
   };
 }

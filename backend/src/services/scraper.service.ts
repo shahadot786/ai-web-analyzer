@@ -94,21 +94,39 @@ class ScraperService {
               absoluteHref = new URL(href, pageUrl).href;
             } catch (e) {}
             
+            // Only include links with http, https, or www, or starting with //
+            const isValidLink = absoluteHref.startsWith('http://') || 
+                                absoluteHref.startsWith('https://') || 
+                                absoluteHref.startsWith('www.') ||
+                                absoluteHref.startsWith('//');
+
+            if (!isValidLink) {
+              return null; // Filter out invalid links
+            }
+
+            // Normalize the URL if it starts with www. or //
+            let normalizedHref = absoluteHref;
+            if (absoluteHref.startsWith('//')) {
+              normalizedHref = 'https:' + absoluteHref;
+            } else if (absoluteHref.startsWith('www.')) {
+              normalizedHref = 'https://' + absoluteHref;
+            }
+            
             let isInternal = false;
             try {
-              const linkUrl = new URL(absoluteHref, pageUrl);
+              const linkUrl = new URL(normalizedHref, pageUrl);
               const pageUrlObj = new URL(pageUrl);
               isInternal = linkUrl.hostname === pageUrlObj.hostname;
             } catch (e) {}
             
             return {
               text: a.textContent?.trim() || '',
-              href: absoluteHref,
+              href: normalizedHref,
               isInternal,
               isExternal: !isInternal
             };
           })
-          .filter((link: any) => link.href && link.href !== '#');
+          .filter((link: any) => link && link.href && link.href !== '#'); // Filter out nulls and empty/hash links
         
         result.images = Array.from(document.querySelectorAll('img'))
           .map((img: any) => {

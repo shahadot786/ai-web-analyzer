@@ -14,6 +14,7 @@ export interface ScrapedData {
   paragraphs: {
     text: string;
     summary?: string;
+    importance?: number;
   }[];
   links: {
     text: string;
@@ -42,6 +43,7 @@ export interface AIAnalysis {
   contentSummary: string;
   keyTopics: string[];
   sentiment?: 'positive' | 'negative' | 'neutral';
+  sentimentConfidence?: number;
   readabilityScore?: number;
   seoInsights: {
     titleQuality: string;
@@ -51,6 +53,19 @@ export interface AIAnalysis {
     recommendations: string[];
   };
   contentCategories: string[];
+  entities?: {
+    people: string[];
+    organizations: string[];
+    locations: string[];
+    technologies: string[];
+  };
+  keywords?: {
+    keyword: string;
+    relevance: number;
+  }[];
+  contentQualityScore?: number;
+  contentQualityInsights?: string[];
+  competitiveInsights?: string[];
 }
 
 export interface AnalyticsData {

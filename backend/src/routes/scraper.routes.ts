@@ -9,7 +9,7 @@ import { randomUUID } from 'crypto';
 const router = Router();
 
 // In-memory storage for scraping results (in production, use a database)
-const scrapeResults = new Map<string, ScrapeResult>();
+export const scrapeResults = new Map<string, ScrapeResult>();
 const scrapeHistory: { id: string; url: string; timestamp: Date }[] = [];
 
 /**

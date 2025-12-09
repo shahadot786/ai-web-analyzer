@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Search, Loader2, AlertCircle, Sparkles } from 'lucide-react';
 import { scrapeWebsite, type ScrapeResult } from './services/api';
 import ResultsDisplay from './components/ResultsDisplay';
+import ThemeToggle from './components/ThemeToggle';
 import './index.css';
 
 function App() {
@@ -53,18 +54,21 @@ function App() {
         padding: 'var(--spacing-lg) 0',
       }}>
         <div className="container">
-          <div className="flex items-center gap-md">
-            <img 
-              src="/scraper_logo.png" 
-              alt="AI Website Scraper Logo" 
-              style={{ width: '48px', height: '48px' }}
-            />
-            <h1 className="gradient-text" style={{ marginBottom: 0 }}>
-              AI Website Scraper
-            </h1>
+          <div className="flex items-center justify-between mb-sm">
+            <div className="flex items-center gap-md">
+              <img 
+                src="/scraper_logo.png" 
+                alt="AI Web Analyzer Logo" 
+                style={{ width: '48px', height: '48px' }}
+              />
+              <h1 className="gradient-text" style={{ marginBottom: 0 }}>
+                AI Web Analyzer
+              </h1>
+            </div>
+            <ThemeToggle />
           </div>
-          <p style={{ color: 'var(--text-secondary)', marginTop: 'var(--spacing-sm)', marginBottom: 0 }}>
-            Extract, analyze, and understand any website with AI-powered insights
+          <p style={{ color: 'var(--text-secondary)', marginBottom: 0 }}>
+            Intelligent web analysis with AI-powered insights, SEO recommendations, and content quality scoring
           </p>
         </div>
       </header>
@@ -136,7 +140,7 @@ function App() {
                   ) : (
                     <>
                       <Search size={20} />
-                      Scrape & Analyze
+                      Analyze Website
                     </>
                   )}
                 </button>
@@ -146,9 +150,9 @@ function App() {
             {/* Features */}
             <div className="grid grid-3 mt-xl">
               {[
-                { icon: '🔍', title: 'Smart Extraction', desc: 'Extract titles, headings, content, links, and images' },
-                { icon: '🤖', title: 'AI Analysis', desc: 'Get AI-powered summaries and content insights' },
-                { icon: '📊', title: 'SEO Insights', desc: 'Comprehensive SEO analysis and recommendations' },
+                { icon: '🔍', title: 'Smart Analysis', desc: 'Extract and analyze content, structure, links, and images' },
+                { icon: '🤖', title: 'AI Insights', desc: 'Entity extraction, keywords, sentiment, and quality scoring' },
+                { icon: '📊', title: 'SEO & Quality', desc: 'Comprehensive SEO analysis and content quality recommendations' },
               ].map((feature, i) => (
                 <div key={i} className="card text-center">
                   <div style={{ fontSize: '2rem', marginBottom: 'var(--spacing-sm)' }}>

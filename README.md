@@ -1,6 +1,6 @@
-# 🌐 AI-Powered Website Scraper
+# 🌐 AI Web Analyzer
 
-A comprehensive full-stack website scraper with AI-powered content analysis, built with Express.js, React.js, TypeScript, and Playwright. Perfect for extracting, analyzing, and understanding any website with intelligent insights.
+A comprehensive full-stack web analyzer with advanced AI-powered content analysis, built with Express.js, React.js, TypeScript, and Playwright. Extract, analyze, and understand any website with intelligent insights, SEO recommendations, and content quality scoring.
 
 ![Tech Stack](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
@@ -9,26 +9,34 @@ A comprehensive full-stack website scraper with AI-powered content analysis, bui
 
 ## ✨ Features
 
-### 🔍 Smart Web Scraping
-- **Playwright-powered**: Handles JavaScript-rendered content and dynamic websites
+### 🔍 Smart Web Analysis
+- **Playwright-powered scraping**: Handles JavaScript-rendered content and dynamic websites
 - **Comprehensive extraction**: Titles, headings (H1-H6), paragraphs, links, images, and metadata
-- **Error handling**: Robust error handling for timeouts, invalid URLs, and edge cases
+- **Intelligent content prioritization**: Automatically ranks content by importance
+- **Robust error handling**: Handles timeouts, invalid URLs, and edge cases
 
-### 🤖 AI-Powered Analysis
-- **Content summarization**: AI-generated summaries for each paragraph
+### 🤖 Advanced AI Analysis
+- **Content summarization**: AI-generated comprehensive summaries
+- **Entity extraction**: Identifies people, organizations, locations, and technologies
+- **Keyword analysis**: Extracts keywords with relevance scores (0-100)
 - **Topic extraction**: Automatically identifies key topics and themes
-- **Sentiment analysis**: Determines content sentiment (positive/negative/neutral)
+- **Sentiment analysis**: Determines sentiment with confidence scores
 - **Content categorization**: Classifies content into relevant categories
-- **Readability scoring**: Calculates how easy the content is to read
+- **Readability scoring**: Flesch-Kincaid based readability analysis
+- **Content quality scoring**: Overall content quality assessment (0-100)
+- **Competitive insights**: Strategic recommendations for improvement
 
-### 📊 Advanced Analytics
-- **SEO insights**: Comprehensive SEO analysis with actionable recommendations
+### 📊 Comprehensive Analytics
+- **SEO insights**: Detailed SEO analysis with actionable recommendations
 - **Link analysis**: Internal vs external links, broken link detection
-- **Image analysis**: Alt text coverage and image optimization metrics
+- **Image analysis**: Alt text coverage and optimization metrics
 - **Content metrics**: Word count, reading time, heading structure analysis
 - **SEO scoring**: Overall SEO score from 0-100
+- **Quality scoring**: Content quality assessment with specific insights
 
 ### 🎨 Modern UI/UX
+- **Minimal, clean design**: Shows only essential data by default
+- **Expandable sections**: Detailed data available on demand
 - **Dark mode design**: Beautiful, modern dark theme with glassmorphism effects
 - **Responsive layout**: Works perfectly on all screen sizes
 - **Smooth animations**: Micro-interactions and transitions for better UX
@@ -45,7 +53,7 @@ A comprehensive full-stack website scraper with AI-powered content analysis, bui
 1. **Clone the repository**
 \`\`\`bash
 git clone <repository-url>
-cd simple-blog-scraper
+cd ai-web-analyzer
 \`\`\`
 
 2. **Install backend dependencies**
@@ -92,7 +100,7 @@ Frontend will run on http://localhost:5173
 ## 📖 API Documentation
 
 ### POST /api/scrape
-Scrape and analyze a website.
+Analyze a website with comprehensive AI insights.
 
 **Request Body:**
 \`\`\`json
@@ -116,7 +124,7 @@ Scrape and analyze a website.
       "url": "https://example.com",
       "title": "Page Title",
       "headings": { "h1": [], "h2": [], ... },
-      "paragraphs": [{ "text": "...", "summary": "..." }],
+      "paragraphs": [{ "text": "...", "summary": "...", "importance": 85 }],
       "links": [{ "text": "...", "href": "...", "isInternal": true }],
       "images": [{ "src": "...", "alt": "..." }],
       "metadata": { ... }
@@ -125,9 +133,20 @@ Scrape and analyze a website.
       "contentSummary": "...",
       "keyTopics": [],
       "sentiment": "positive",
+      "sentimentConfidence": 85,
       "readabilityScore": 75,
       "seoInsights": { ... },
-      "contentCategories": []
+      "contentCategories": [],
+      "entities": {
+        "people": [],
+        "organizations": [],
+        "locations": [],
+        "technologies": []
+      },
+      "keywords": [{ "keyword": "...", "relevance": 95 }],
+      "contentQualityScore": 82,
+      "contentQualityInsights": [],
+      "competitiveInsights": []
     },
     "analytics": {
       "totalWords": 1500,
@@ -142,10 +161,10 @@ Scrape and analyze a website.
 \`\`\`
 
 ### GET /api/scrape/:id
-Retrieve a specific scraping result by ID.
+Retrieve a specific analysis result by ID.
 
 ### GET /api/history
-Get scraping history (last 50 results).
+Get analysis history (last 50 results).
 
 ### GET /api/health
 Health check endpoint.
@@ -153,7 +172,7 @@ Health check endpoint.
 ## 🏗️ Project Structure
 
 \`\`\`
-simple-blog-scraper/
+ai-web-analyzer/
 ├── backend/
 │   ├── src/
 │   │   ├── services/
@@ -189,14 +208,14 @@ simple-blog-scraper/
 - **Express.js**: Web framework
 - **TypeScript**: Type-safe JavaScript
 - **Playwright**: Headless browser automation
-- **Google Gemini AI**: AI-powered content analysis
+- **Google Gemini AI**: Advanced AI-powered content analysis
 - **Zod**: Schema validation
 - **Helmet**: Security middleware
 - **CORS**: Cross-origin resource sharing
 - **Express Rate Limit**: API rate limiting
 
 ### Frontend
-- **React 18**: UI library
+- **React 19**: UI library
 - **TypeScript**: Type-safe JavaScript
 - **Vite**: Build tool and dev server
 - **Axios**: HTTP client
@@ -205,12 +224,15 @@ simple-blog-scraper/
 
 ## 🎯 Use Cases
 
-- **SEO Analysis**: Analyze websites for SEO optimization opportunities
+- **SEO Analysis**: Comprehensive SEO optimization opportunities and recommendations
 - **Content Research**: Extract and analyze content from competitor websites
-- **Data Collection**: Gather structured data from multiple websites
-- **Website Audits**: Perform comprehensive website audits
+- **Content Quality Assessment**: Evaluate content quality with AI-powered insights
+- **Entity Extraction**: Identify key people, organizations, locations, and technologies
+- **Keyword Research**: Extract relevant keywords with importance scores
+- **Website Audits**: Perform comprehensive website audits with actionable insights
+- **Competitive Analysis**: Get strategic recommendations for improvement
 - **Content Migration**: Extract content for migration purposes
-- **Market Research**: Analyze content trends across multiple sites
+- **Market Research**: Analyze content trends and strategies across multiple sites
 
 ## 🔒 Security Features
 
@@ -230,6 +252,7 @@ The application handles various edge cases:
 - Protected/blocked content
 - Missing or malformed data
 - API rate limits
+- AI analysis failures
 
 ## 📝 Environment Variables
 
@@ -242,7 +265,7 @@ The application handles various edge cases:
 
 ## 🤝 Contributing
 
-This is an interview project. Feel free to fork and modify for your own use!
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 

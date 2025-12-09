@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import scraperRoutes from './routes/scraper.routes.js';
+import pdfRoutes from './routes/pdf.routes.js';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware.js';
 import { scraperService } from './services/scraper.service.js';
 
@@ -39,6 +40,7 @@ app.use('/api', limiter);
 
 // Routes
 app.use('/api', scraperRoutes);
+app.use('/api/export', pdfRoutes);
 
 // 404 handler
 app.use(notFoundHandler);

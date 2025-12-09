@@ -104,13 +104,16 @@ export interface ScrapeResult {
   error?: string;
 }
 
+export interface ScrapeOptions {
+  waitForSelector?: string;
+  timeout?: number;
+  includeAIAnalysis?: boolean;
+  useCache?: boolean;
+}
+
 export interface ScrapeRequest {
   url: string;
-  options?: {
-    waitForSelector?: string;
-    timeout?: number;
-    includeAIAnalysis?: boolean;
-  };
+  options?: ScrapeOptions;
 }
 
 export class AppError extends Error {

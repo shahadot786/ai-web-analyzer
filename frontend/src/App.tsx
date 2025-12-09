@@ -1,8 +1,12 @@
 import { useState } from 'react';
-import { Search, Loader2, AlertCircle, Sparkles } from 'lucide-react';
+import { Search, Loader2, AlertCircle, Sparkles, History, GitCompare, Share2, X } from 'lucide-react';
 import { scrapeWebsite, type ScrapeResult } from './services/api';
 import ResultsDisplay from './components/ResultsDisplay';
 import ThemeToggle from './components/ThemeToggle';
+import HistoryView from './components/HistoryView';
+import ComparisonView from './components/ComparisonView';
+import { useHistory } from './hooks/useHistory';
+import { useBookmarks } from './hooks/useBookmarks';
 import './index.css';
 
 function App() {
@@ -10,6 +14,12 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState<ScrapeResult | null>(null);
+  const [showHistory, setShowHistory] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
+  const [shareUrl, setShareUrl] = useState('');
+  
+  const { addToHistory } = useHistory();
+  const { addBookmark, isBookmarked } = useBookmarks();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,11 +37,12 @@ function App() {
       const data = await scrapeWebsite({
         url: url.trim(),
         options: {
-          timeout: 60000, // Increased to 60 seconds for heavy sites
+          timeout: 60000,
           includeAIAnalysis: true,
         },
       });
       setResult(data);
+      addToHistory(data);
     } catch (err: any) {
       setError(err.response?.data?.error?.message || 'Failed to scrape website. Please try again.');
     } finally {
@@ -43,6 +54,25 @@ function App() {
     setUrl('');
     setResult(null);
     setError('');
+  };
+
+  const handleShare = () => {
+    if (!result) return;
+    
+    // Create shareable URL (in production, this would generate a unique link)
+    const shareableUrl = `${window.location.origin}?result=${result.id}`;
+    setShareUrl(shareableUrl);
+    
+    // Copy to clipboard
+    navigator.clipboard.writeText(shareableUrl).then(() => {
+      alert('Share link copied to clipboard!');
+    });
+  };
+
+  const handleSelectFromHistory = (id: string) => {
+    // In a real app, you'd fetch the result by ID
+    setShowHistory(false);
+    // For now, just close the modal
   };
 
   return (
@@ -65,7 +95,25 @@ function App() {
                 AI Web Analyzer
               </h1>
             </div>
-            <ThemeToggle />
+            <div className="flex items-center gap-sm">
+              <button
+                onClick={() => setShowHistory(true)}
+                className="btn btn-secondary"
+                style={{ padding: 'var(--spacing-sm)' }}
+                title="View History"
+              >
+                <History size={20} />
+              </button>
+              <button
+                onClick={() => setShowComparison(true)}
+                className="btn btn-secondary"
+                style={{ padding: 'var(--spacing-sm)' }}
+                title="Compare Websites"
+              >
+                <GitCompare size={20} />
+              </button>
+              <ThemeToggle />
+            </div>
           </div>
           <p style={{ color: 'var(--text-secondary)', marginBottom: 0 }}>
             Intelligent web analysis with AI-powered insights, SEO recommendations, and content quality scoring
@@ -168,6 +216,18 @@ function App() {
           <ResultsDisplay result={result} onReset={handleReset} />
         )}
       </main>
+
+      {/* Modals */}
+      {showHistory && (
+        <HistoryView
+          onClose={() => setShowHistory(false)}
+          onSelectResult={handleSelectFromHistory}
+        />
+      )}
+
+      {showComparison && (
+        <ComparisonView onClose={() => setShowComparison(false)} />
+      )}
     </div>
   );
 }

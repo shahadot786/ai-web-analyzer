@@ -381,3 +381,71 @@ a:hover {
 
 .w-full { width: 100%; }
 .h-full { height: 100%; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  /* Typography adjustments */
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.25rem; }
+  
+  /* Container padding */
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+  
+  /* Card adjustments */
+  .card, .card-glass {
+    padding: var(--spacing-lg);
+  }
+  
+  /* Button sizing */
+  .btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.875rem;
+  }
+  
+  /* Grid adjustments */
+  .grid-2, .grid-3 {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Flex wrap for mobile */
+  .flex {
+    flex-wrap: wrap;
+  }
+  
+  /* Spacing adjustments */
+  .gap-lg {
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  /* Further reduce typography */
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.5rem; }
+  
+  /* Tighter spacing */
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .card, .card-glass {
+    padding: var(--spacing-md);
+  }
+  
+  /* Stack buttons vertically */
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
